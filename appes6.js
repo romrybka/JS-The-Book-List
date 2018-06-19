@@ -43,11 +43,7 @@ class UI {
 
   deleteBook(target) {
     if (target.className === 'delete') {
-      // Delete from UI
       target.parentElement.parentElement.remove();
-
-      // Delete from LS
-      Store.removeBook(target.parentElement.previousElementSibling.textContent);
     }
   }
 
@@ -144,19 +140,23 @@ document.getElementById('book-form').addEventListener('submit', function(e) {
 // Event Listener for delete
 document.getElementById('book-list').addEventListener('click', function(e) {
 
-  // Instantiate UI
-  const ui = new UI();
+  if (e.target.classList.contains('delete')) {
+    // Instantiate UI
+    const ui = new UI();
 
-  // Delete Book (from UI and from LS)
-  ui.deleteBook(e.target);
+    // Delete Book (from UI and from LS)
+    ui.deleteBook(e.target);
+    
+    // Show message
+    ui.showAlert('Book Removed', 'success');
+
+    // Delete from LS
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
+  }
   
-  // Show message
-  ui.showAlert('Book Removed', 'success');
-
   e.preventDefault();
+
 })
-
-
 
 /**
  * If we have something that's gonna show up more than once with the same class or something that is not there when the Page loads but it's dinamically added we're gonna hava to use EVENT DELEGATION.
